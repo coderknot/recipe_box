@@ -30,7 +30,7 @@ public class Tag implements DatabaseManagement {
 
   public static Tag find(int id) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM tags WHERE :id = id;";
+      String sql = "SELECT * FROM tags WHERE id = :id;";
       Tag tag = con.createQuery(sql)
         .addParameter("id", id)
         .executeAndFetchFirst(Tag.class);
@@ -58,9 +58,19 @@ public class Tag implements DatabaseManagement {
     }
   }
 
+  public void update(String description) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE tags SET description = :description WHERE id = :id;";
+      con.createQuery(sql)
+        .addParameter("description", description)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "DELETE FROM tags WHERE :id = id;";
+      String sql = "DELETE FROM tags WHERE id = :id;";
       con.createQuery(sql)
         .addParameter("id", this.getId())
         .executeUpdate();

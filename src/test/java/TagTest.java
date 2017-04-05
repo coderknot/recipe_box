@@ -66,6 +66,15 @@ public class TagTest {
   }
 
   @Test
+  public void update_updatesTagProperties_true() {
+    Tag testTag = new Tag("dinner");
+    testTag.save();
+    String newDescription = "supper";
+    testTag.update(newDescription);
+    assertTrue(Tag.find(testTag.getId()).getDescription().equals("supper"));
+  }
+
+  @Test
   public void delete_deletesTag_true() {
     Tag testTag = new Tag("dinner");
     testTag.save();
