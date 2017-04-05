@@ -16,4 +16,10 @@ public class TagTest {
     assertTrue(testTag  instanceof Tag);
   }
 
+  @Test
+  public void getDescription_getsTagDescription_true() {
+    Tag testTag = new Tag("dinner");
+    assertTrue(testTag.getDescription().equals("dinner"));
+  }
+
 }
