@@ -28,6 +28,16 @@ public class Tag implements DatabaseManagement {
     }
   }
 
+  public static Tag find(int id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM tags WHERE :id = id;";
+      Tag tag = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(Tag.class);
+      return tag;
+    }
+  }
+
   public boolean equals(Object otherTag) {
     if(!(otherTag instanceof Tag)) {
       return false;

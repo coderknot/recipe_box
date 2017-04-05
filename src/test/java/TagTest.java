@@ -55,4 +55,22 @@ public class TagTest {
     testTag.save();
     assertTrue(Tag.all().get(0).equals(testTag));
   }
+
+  @Test
+  public void find_returnsTagWithSameId_Tag() {
+    Tag testTag1 = new Tag("dinner");
+    testTag1.save();
+    Tag testTag2 = new Tag("dinner");
+    testTag2.save();
+    assertEquals(testTag2, Tag.find(testTag2.getId()));
+  }
+
+  @Test
+  public void delete_deletesTag_true() {
+    Tag testTag = new Tag("dinner");
+    testTag.save();
+    int testTagId = testTag.getId();
+    testTag.delete();
+    assertEquals(null, Tag.find(testTagId));
+  }
 }
