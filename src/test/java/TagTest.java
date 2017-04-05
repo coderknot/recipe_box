@@ -17,9 +17,42 @@ public class TagTest {
   }
 
   @Test
-  public void getDescription_getsTagDescription_true() {
+  public void getId_getsTagId_true() {
     Tag testTag = new Tag("dinner");
-    assertTrue(testTag.getDescription().equals("dinner"));
+    testTag.save();
+    assertTrue(testTag.getId() > 0);
   }
 
+  @Test
+  public void getDescription_getsTagDescription_true() {
+    Tag testTag = new Tag("dinner");
+    testTag.save();
+    assertTrue(testTag.getDescription().equals("dinner"));
+    assertTrue(Tag.all().get(0).getDescription().equals("dinner"));
+  }
+
+  @Test
+  public void equals_TagObjectsAreTheSame_true() {
+    Tag testTag1 = new Tag("dinner");
+    testTag1.save();
+    Tag testTag2 = testTag1;
+    assertTrue(testTag1.equals(testTag2));
+  }
+
+  @Test
+  public void all_returnsAllSavedTags_true() {
+    Tag testTag1 = new Tag("dinner");
+    testTag1.save();
+    Tag testTag2 = new Tag("dinner");
+    testTag2.save();
+    assertTrue(Tag.all().get(0).equals(testTag1));
+    assertTrue(Tag.all().get(1).equals(testTag2));
+  }
+
+  @Test
+  public void save_returnsTrueIfTagSaved_true() {
+    Tag testTag = new Tag("dinner");
+    testTag.save();
+    assertTrue(Tag.all().get(0).equals(testTag));
+  }
 }
