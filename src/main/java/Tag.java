@@ -20,7 +20,7 @@ public class Tag implements DatabaseManagement {
 
   public static List<Tag> all() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM tags ORDER BY description;";
+      String sql = "SELECT * FROM tags;";
       return con.createQuery(sql)
         .executeAndFetch(Tag.class);
     }
@@ -36,6 +36,7 @@ public class Tag implements DatabaseManagement {
     }
   }
 
+  @Override
   public boolean equals(Object otherTag) {
     if(!(otherTag instanceof Tag)) {
       return false;
@@ -43,6 +44,7 @@ public class Tag implements DatabaseManagement {
       Tag newTag = (Tag) otherTag;
       return this.getId() == newTag.getId() &&
         this.getDescription().equals(newTag.getDescription());
+
     }
   }
 
@@ -50,7 +52,7 @@ public class Tag implements DatabaseManagement {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO tags (description) VALUES (:description);";
       this.id = (int) con.createQuery(sql, true)
-        .addParameter("description", this.getDescription())
+        .addParameter("description", this.description)
         .executeUpdate()
         .getKey();
     }
@@ -70,7 +72,7 @@ public class Tag implements DatabaseManagement {
     try(Connection con = DB.sql2o.open()) {
       String sql = "DELETE FROM tags WHERE id = :id;";
       con.createQuery(sql)
-        .addParameter("id", this.getId())
+        .addParameter("id", id)
         .executeUpdate();
     }
   }

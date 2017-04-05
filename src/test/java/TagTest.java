@@ -11,7 +11,7 @@ public class TagTest {
   @Test
   public void Tag_instantiatesCorrectly_true() {
     Tag testTag = new Tag("dinner");
-    assertTrue(testTag  instanceof Tag);
+    assertTrue(testTag instanceof Tag);
   }
 
   @Test
@@ -31,25 +31,24 @@ public class TagTest {
 
   @Test
   public void equals_TagObjectsAreTheSame_true() {
-    Tag testTag1 = new Tag("dinner");
-    testTag1.save();
-    Tag testTag2 = testTag1;
-    assertTrue(testTag1.equals(testTag2));
+    Tag testTag = new Tag("dinner");
+    testTag.save();
+    assertTrue(Tag.all().get(0).equals(testTag));
   }
 
   @Test
   public void all_returnsAllSavedTags_true() {
     Tag testTag1 = new Tag("dinner");
     testTag1.save();
-    Tag testTag2 = new Tag("dinner");
+    Tag testTag2 = new Tag("lunch");
     testTag2.save();
-    assertTrue(Tag.all().get(0).equals(testTag1));
-    assertTrue(Tag.all().get(1).equals(testTag2));
+    assertEquals(testTag1, Tag.all().get(0));
+    assertEquals(testTag2, Tag.all().get(1));
   }
 
   @Test
   public void save_returnsTrueIfTagSaved_true() {
-    Tag testTag = new Tag("dinner");
+    Tag testTag = new Tag("breakfast");
     testTag.save();
     assertTrue(Tag.all().get(0).equals(testTag));
   }
@@ -58,7 +57,7 @@ public class TagTest {
   public void find_returnsTagWithSameId_Tag() {
     Tag testTag1 = new Tag("dinner");
     testTag1.save();
-    Tag testTag2 = new Tag("dinner");
+    Tag testTag2 = new Tag("lunch");
     testTag2.save();
     assertEquals(testTag2, Tag.find(testTag2.getId()));
   }
@@ -80,4 +79,5 @@ public class TagTest {
     testTag.delete();
     assertEquals(null, Tag.find(testTagId));
   }
+
 }
