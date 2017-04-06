@@ -1,7 +1,7 @@
 import org.sql2o.*;
 import java.util.List;
 
-public class Rating {
+public class Rating implements DatabaseManagement {
 
   private int id;
   private int rating;
@@ -36,6 +36,7 @@ public class Rating {
     }
   }
 
+  @Override
   public boolean equals(Object otherRating) {
     if(!(otherRating instanceof Rating)) {
       return false;
@@ -46,33 +47,33 @@ public class Rating {
     }
   }
 
-  // public void save() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "INSERT INTO ratings (rating) VALUES (:rating);";
-  //     this.id = (int) con.createQuery(sql, true)
-  //       .addParameter("rating", this.getRating())
-  //       .executeUpdate()
-  //       .getKey();
-  //   }
-  // }
-  //
-  // public void update(int rating) {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "UPDATE ratings SET rating = :rating WHERE id = :id;";
-  //     con.createQuery(sql)
-  //       .addParameter("rating", rating)
-  //       .addParameter("id", id)
-  //       .executeUpdate();
-  //   }
-  // }
-  //
-  // public void delete() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "DELETE FROM ratings WHERE id = :id;";
-  //     con.createQuery(sql)
-  //       .addParameter("id", this.getId())
-  //       .executeUpdate();
-  //   }
-  // }
+  public void save() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "INSERT INTO ratings (rating) VALUES (:rating);";
+      this.id = (int) con.createQuery(sql, true)
+        .addParameter("rating", this.getRating())
+        .executeUpdate()
+        .getKey();
+    }
+  }
+
+  public void update(int rating) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE ratings SET rating = :rating WHERE id = :id;";
+      con.createQuery(sql)
+        .addParameter("rating", rating)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM ratings WHERE id = :id;";
+      con.createQuery(sql)
+        .addParameter("id", this.getId())
+        .executeUpdate();
+    }
+  }
 
 }

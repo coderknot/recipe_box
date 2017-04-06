@@ -20,7 +20,7 @@ public class Tag implements DatabaseManagement {
 
   public static List<Tag> all() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM tags;";
+      String sql = "SELECT * FROM tags ORDER BY description;";
       return con.createQuery(sql)
         .executeAndFetch(Tag.class);
     }

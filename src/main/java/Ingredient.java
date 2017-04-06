@@ -36,6 +36,7 @@ public class Ingredient implements DatabaseManagement {
     }
   }
 
+  @Override
   public boolean equals(Object otherIngredient) {
     if(!(otherIngredient instanceof Ingredient)) {
       return false;

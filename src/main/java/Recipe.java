@@ -40,16 +40,18 @@ public class Recipe implements DatabaseManagement {
 
   public static List<Recipe> all() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM tags ORDER BY description;";
+      String sql = "SELECT * FROM recipes;";
       return con.createQuery(sql)
+        .addColumnMapping("rating_id", "ratingId")
         .executeAndFetch(Recipe.class);
     }
   }
 
   public static Recipe find(int id) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM tags WHERE id = :id;";
+      String sql = "SELECT * FROM recipes WHERE id = :id;";
       Recipe tag = con.createQuery(sql)
+        .addColumnMapping("rating_id", "ratingId")
         .addParameter("id", id)
         .executeAndFetchFirst(Recipe.class);
       return tag;
@@ -62,6 +64,7 @@ public class Recipe implements DatabaseManagement {
     } else {
       Recipe newRecipe = (Recipe) otherRecipe;
       return this.getId() == newRecipe.getId() &&
+        this.getTitle().equals(newRecipe.getTitle()) &&
         this.getDescription().equals(newRecipe.getDescription());
     }
   }

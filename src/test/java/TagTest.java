@@ -6,7 +6,7 @@ import java.util.List;
 public class TagTest {
 
   @Rule
-  public DatabaseRule databse = new DatabaseRule();
+  public DatabaseRule database = new DatabaseRule();
 
   @Test
   public void Tag_instantiatesCorrectly_true() {
@@ -42,8 +42,8 @@ public class TagTest {
     testTag1.save();
     Tag testTag2 = new Tag("lunch");
     testTag2.save();
-    assertEquals(testTag1, Tag.all().get(0));
-    assertEquals(testTag2, Tag.all().get(1));
+    assertEquals(testTag1.getId(), Tag.find(testTag1.getId()).getId());
+    assertEquals(testTag2.getId(), Tag.find(testTag2.getId()).getId());
   }
 
   @Test
