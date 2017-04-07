@@ -38,6 +38,10 @@ public class Recipe implements DatabaseManagement {
     return this.ratingId;
   }
 
+  public Timestamp getCreated() {
+    return this.created;
+  }
+
   public static List<Recipe> all() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT * FROM recipes;";
@@ -65,26 +69,63 @@ public class Recipe implements DatabaseManagement {
       Recipe newRecipe = (Recipe) otherRecipe;
       return this.getId() == newRecipe.getId() &&
         this.getTitle().equals(newRecipe.getTitle()) &&
-        this.getDescription().equals(newRecipe.getDescription());
+        this.getDescription().equals(newRecipe.getDescription()) &&
+        this.getNote().eqauls(newRecipe.getNote()) &&
+        this.getRatingId() == newRecipe.getRatingId() &&
+        this.getCreated().equals(newRecipe.getCreated());
     }
   }
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO tags (description) VALUES (:description);";
+      String sql = "INSERT INTO recipes (title, description, note, ratingId, created) VALUES (:title, :description, :note, :ratingId, now())";
       this.id = (int) con.createQuery(sql, true)
+        .addColumnMapping("rating_id", "ratingId")
+        .addParameter("title", this.getTitle())
         .addParameter("description", this.getDescription())
+        .addParameter("note", this.getNote())
+        .addParameter("ratingId", this.getRatingId())
         .executeUpdate()
         .getKey();
     }
   }
 
-  public void update(String description) {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE tags SET description = :description WHERE id = :id;";
+  public void updateParser(String title, String description, String note, int ratingId) {
+
+    String column = "";
+    String value = "";
+
+    if(!(this.getTitle().equals(title) || title.isEmpty() || title == null)) {
+      column = "title";
+      value = String.valueOf(title);
+      update(column, value);
+    }
+
+    if(!(this.getDescription().equals(description) || description.isEmpty() || description == null)) {
+      column = "description";
+      value = String.valueOf(description);
+      update(column, value);
+    }
+
+    if(!(this.getNote().equals(note) || note.isEmpty() || note == null)) {
+      column = "note";
+      value = String.valueOf(note);
+      update(column, value);
+    }
+
+    if(!(this.getRatingId() == ratingId || ratingId <= 0)) {
+      column = "rating_id";
+      value = String.valueOf(ratingId);
+      update(column, value);
+    }
+
+  }
+
+  public void update(String column, String value){
+    try (Connection con = DB.sql2o.open()){
+      String sql = String.format("UPDATE steps SET %s = %s WHERE id = :id;", column, value);
       con.createQuery(sql)
-        .addParameter("description", description)
-        .addParameter("id", id)
+        .addParameter("id", this.id)
         .executeUpdate();
     }
   }
